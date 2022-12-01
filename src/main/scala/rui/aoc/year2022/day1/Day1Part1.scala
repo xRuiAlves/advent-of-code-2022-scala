@@ -10,7 +10,7 @@ class Day1Part1 extends ProblemSolution {
     val inputLines = FileIO.readResourceLines("day1.txt")
     inputLines.foldLeft(Status(0, 0))((status: Status, curr) => curr match {
       case "" => Status(math.max(status.max, status.currSum), 0)
-      case _ => Status(status.max, status.currSum + curr.toInt)
+      case _  => Status(status.max, status.currSum + curr.toInt)
     }).max
   }
 }

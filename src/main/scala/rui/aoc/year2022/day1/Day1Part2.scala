@@ -11,7 +11,7 @@ class Day1Part2 extends ProblemSolution {
     inputLines
       .foldLeft(Status(List.empty, 0))((status: Status, curr) => curr match {
         case "" => Status(status.list :+ status.currSum, 0)
-        case _ => Status(status.list, status.currSum + curr.toInt)
+        case _  => Status(status.list, status.currSum + curr.toInt)
       })
       .list
       .sorted
