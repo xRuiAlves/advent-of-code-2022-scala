@@ -7,25 +7,27 @@ object Main {
   final val DAY_FLAG = "--day"
   final val PART_FLAG = "--part"
 
-  def validateInput(day: Option[Int], part: Option[Int]) = {
-    if (day.isEmpty) throw new Exception("The day must be specified")
-    if (part.isEmpty) throw new Exception("The day part must be specified")
-    if (!Seq(1, 2).contains(part.get)) throw new Exception("The day part must be either 1 or 2")
-  }
-
   def main(args: Array[String]): Unit = {
     val flags = parseFlags(args)
     val day = flags.get(DAY_FLAG).map(_.toInt)
     val part = flags.get(PART_FLAG).map(_.toInt)
     validateInput(day, part)
 
-    val solution = Class
-      .forName(s"${this.getClass.getPackageName}.day${day.get}.Day${day.get}Part${part.get}")
+    val solution = solve(day.get, part.get)
+    println(solution)
+  }
+
+  def solve(day: Int, part: Int): String = Class
+      .forName(s"${this.getClass.getPackageName}.day${day}.Day${day}Part${part}")
       .getDeclaredConstructor()
       .newInstance()
       .asInstanceOf[ProblemSolution]
-    val res = solution.solve()
-    println(res)
+      .solve()
+
+  def validateInput(day: Option[Int], part: Option[Int]) = {
+    if (day.isEmpty) throw new Exception("The day must be specified")
+    if (part.isEmpty) throw new Exception("The day part must be specified")
+    if (!Seq(1, 2).contains(part.get)) throw new Exception("The day part must be either 1 or 2")
   }
 
   def parseFlags(args: Array[String]): mutable.Map[String, String] = {
