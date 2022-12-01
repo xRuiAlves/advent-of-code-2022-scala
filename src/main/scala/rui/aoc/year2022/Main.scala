@@ -17,7 +17,7 @@ object Main {
     println(solution)
   }
 
-  def solve(day: Int, part: Int): String = Class
+  def solve(day: Int, part: Int): AnyVal = Class
       .forName(s"${this.getClass.getPackageName}.day${day}.Day${day}Part${part}")
       .getDeclaredConstructor()
       .newInstance()
