@@ -13,8 +13,12 @@ object Main {
     val part = flags.get(PART_FLAG).map(_.toInt)
     validateInput(day, part)
 
+    val t0 = System.nanoTime
     val solution = solve(day.get, part.get)
-    println(solution)
+    val t1 = System.nanoTime
+    val duration = (t1 - t0) / 1e6d
+    println(s"Solution: $solution")
+    println(s"Duration: ${duration} ms")
   }
 
   def solve(day: Int, part: Int): AnyVal = Class
