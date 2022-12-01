@@ -12,21 +12,22 @@ object Main {
     val day = flags.get(DAY_FLAG).map(_.toInt)
     val part = flags.get(PART_FLAG).map(_.toInt)
     validateInput(day, part)
-
-    val t0 = System.nanoTime
-    val solution = solve(day.get, part.get)
-    val t1 = System.nanoTime
-    val duration = (t1 - t0) / 1e6d
-    println(s"Solution: $solution")
-    println(s"Duration: ${duration} ms")
+    solve(day.get, part.get)
   }
 
-  def solve(day: Int, part: Int): AnyVal = Class
+  def solve(day: Int, part: Int): AnyVal = {
+    val t0 = System.nanoTime
+    val result = Class
       .forName(s"${this.getClass.getPackageName}.day${day}.Day${day}Part${part}")
       .getDeclaredConstructor()
       .newInstance()
       .asInstanceOf[ProblemSolution]
       .solve()
+    val t1 = System.nanoTime
+    val duration = (t1 - t0) / 1e6d
+    println(s"Solution: $result")
+    println(s"Duration: $duration ms")
+  }
 
   def validateInput(day: Option[Int], part: Option[Int]) = {
     if (day.isEmpty) throw new Exception("The day must be specified")
