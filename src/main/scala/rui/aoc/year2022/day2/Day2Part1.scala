@@ -21,19 +21,17 @@ class Day2Part1 extends ProblemSolution {
     shapeScore + outcomeScore
   }
 
-  def computeOutcomeScore(round: Round): Int = {
-    round match {
-      case Round("A", "X") => 3
-      case Round("A", "Y") => 6
-      case Round("A", "Z") => 0
-      case Round("B", "X") => 0
-      case Round("B", "Y") => 3
-      case Round("B", "Z") => 6
-      case Round("C", "X") => 6
-      case Round("C", "Y") => 0
-      case Round("C", "Z") => 3
-      case _ => throw new Exception("Unexpected round!")
-    }
+  def computeOutcomeScore(round: Round): Int = round match {
+    case Round("A", "X") => 3
+    case Round("A", "Y") => 6
+    case Round("A", "Z") => 0
+    case Round("B", "X") => 0
+    case Round("B", "Y") => 3
+    case Round("B", "Z") => 6
+    case Round("C", "X") => 6
+    case Round("C", "Y") => 0
+    case Round("C", "Z") => 3
+    case _ => throw new Exception("Unexpected round!")
   }
 
   case class Round(opponentMove: String, myMove: String)
