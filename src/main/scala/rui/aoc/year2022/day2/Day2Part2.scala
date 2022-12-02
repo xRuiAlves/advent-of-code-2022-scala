@@ -4,14 +4,11 @@ import rui.aoc.year2022.ProblemSolution
 import rui.aoc.year2022.utils.FileIO
 
 class Day2Part2 extends ProblemSolution {
-  override def solve(): AnyVal = {
-    val inputLines = FileIO.readResourceLines("day2.txt")
-
-    inputLines
-      .map(Round.fromStr)
-      .map(computeScore)
-      .sum
-  }
+  override def solve(): AnyVal = FileIO
+    .readResourceLines("day2.txt")
+    .map(Round.fromStr)
+    .map(computeScore)
+    .sum
 
   def computeScore(round: Round): Int = {
     val shapeScore = round.myMove match {
