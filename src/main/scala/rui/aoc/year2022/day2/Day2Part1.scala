@@ -4,14 +4,10 @@ import rui.aoc.year2022.ProblemSolution
 import rui.aoc.year2022.utils.FileIO
 
 class Day2Part1 extends ProblemSolution {
-  case class Round(opponentMove: String, myMove: String)
-
   override def solve(): AnyVal = {
     val inputLines = FileIO.readResourceLines("day2.txt")
     inputLines
-      .map(_.split(" ") match {
-        case Array(opponentMove, myMove) => Round(opponentMove, myMove)
-      })
+      .map(Round.fromStr)
       .map(computeScore)
       .sum
   }
@@ -21,6 +17,7 @@ class Day2Part1 extends ProblemSolution {
       case "X" => 1
       case "Y" => 2
       case "Z" => 3
+      case _ => throw new Exception("Unexpected move!")
     }
     val outcomeScore = computeOutcomeScore(round)
     shapeScore + outcomeScore
@@ -37,6 +34,16 @@ class Day2Part1 extends ProblemSolution {
       case Round("C", "X") => 6
       case Round("C", "Y") => 0
       case Round("C", "Z") => 3
+      case _ => throw new Exception("Unexpected round!")
+    }
+  }
+
+  case class Round(opponentMove: String, myMove: String)
+  object Round {
+    def fromStr(roundStr: String): Round = {
+      roundStr.split(" ") match {
+        case Array(opponentMove, myMove) => Round(opponentMove, myMove)
+      }
     }
   }
 }
