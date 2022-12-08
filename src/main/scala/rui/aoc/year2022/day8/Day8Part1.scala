@@ -7,61 +7,45 @@ import rui.aoc.year2022.utils.FileIO
 import scala.collection.mutable
 
 class Day8Part1 extends ProblemSolution {
+
+  def findVisibleTrees(trees: mutable.Set[Tree], treeLine: Array[Tree]): Unit = treeLine.foldLeft(-1) {
+    case (maxHeight, tree) =>
+      if (tree.height > maxHeight) {
+        trees.addOne(tree)
+        tree.height
+      }
+      else maxHeight
+  }
+
   override def solve(): AnyVal = {
-    val grid: Array[Array[Int]] = FileIO
+    val grid: Array[Array[Tree]] = FileIO
       .readResourceLines("day8.txt")
-      .map(_
-        .toCharArray
-        .map(_ - '0')
-      )
-    val trees = mutable.Set[TreeCoord]()
-
-    // Left to Right
-    for (i <- grid.indices) {
-      var currMax = -1
-      for (j <- grid(i).indices) {
-        if (grid(i)(j) > currMax) {
-          trees.addOne((i, j))
-          currMax = grid(i)(j)
-        }
+      .zipWithIndex
+      .map {
+        case (lineStr, y) => lineStr
+          .toCharArray
+          .map(_ - '0')
+          .zipWithIndex
+          .map {
+            case (height, x) => Tree(height, x, y)
+          }
       }
-    }
+    val trees = mutable.Set[Tree]()
 
+    // Horizontal
+    grid.foreach(treeLine => {
+      findVisibleTrees(trees, treeLine)
+      findVisibleTrees(trees, treeLine.reverse)
+    })
 
-    // Right to Left
-    for (i <- grid.indices) {
-      var currMax = -1
-      for (j <- grid(i).indices.reverse) {
-        if (grid(i)(j) > currMax) {
-          trees.addOne((i, j))
-          currMax = grid(i)(j)
-        }
-      }
-    }
+    // Vertical
+    grid.transpose.foreach(treeLine => {
+      findVisibleTrees(trees, treeLine)
+      findVisibleTrees(trees, treeLine.reverse)
+    })
 
-    // Top to Bottom
-    for (j <- grid.head.indices) {
-      var currMax = -1
-      for (i <- grid(j).indices) {
-        if (grid(i)(j) > currMax) {
-          trees.addOne((i, j))
-          currMax = grid(i)(j)
-        }
-      }
-    }
-
-    // Top to Bottom
-    for (j <- grid.head.indices) {
-      var currMax = -1
-      for (i <- grid(j).indices.reverse) {
-        if (grid(i)(j) > currMax) {
-          trees.addOne((i, j))
-          currMax = grid(i)(j)
-        }
-      }
-    }
     trees.size
   }
 
-  type TreeCoord = (Int, Int)
+  case class Tree(height: Int, x: Int, y: Int)
 }
