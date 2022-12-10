@@ -11,9 +11,7 @@ class Day10Part1 extends ProblemSolution {
     val values = instructions.foldLeft(Vector(1))((values, instruction) => instruction match {
       case "noop" => values.appended(values.last)
       case _ => instruction.split(" ") match {
-        case Array(_, delta) => {
-          values.appended(values.last).appended(values.last + delta.toInt)
-        }
+        case Array(_, delta) => values.appended(values.last).appended(values.last + delta.toInt)
       }
     })
 
