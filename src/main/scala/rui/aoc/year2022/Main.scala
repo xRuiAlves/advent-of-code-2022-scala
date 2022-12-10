@@ -25,8 +25,8 @@ object Main {
       .solve()
     val t1 = System.nanoTime
     val duration = (t1 - t0) / 1e6d
-    println(s"Solution: $result")
     println(s"Duration: $duration ms")
+    println(s"Solution:\n$result")
   }
 
   def validateInput(day: Option[Int], part: Option[Int]) = {
