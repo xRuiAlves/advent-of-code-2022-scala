@@ -1,23 +1,22 @@
 package rui.aoc.year2022.day11
 
 import rui.aoc.year2022.ProblemSolution
-import rui.aoc.year2022.day10.Day10.computeCycleValues
+import rui.aoc.year2022.day11.Day11.{applyOp, parseMonkeys}
 import rui.aoc.year2022.utils.FileIO
 
 import scala.collection.mutable.ArrayBuffer
 
 class Day11Part1 extends ProblemSolution {
   override def solve(): AnyVal = {
-    val monkeys = FileIO
-      .readResourceLines("day11.txt")
-      .grouped(7)
-      .toArray
-      .map(parseMonkey)
+    val monkeys = parseMonkeys(FileIO
+      .readResourceLines("day11.txt"))
 
     (0 until 20).foreach(_ => processRound(monkeys))
+
     monkeys
       .map(_.numItemsInspected)
       .sorted
+      .map(_.toLong)
       .takeRight(2)
       .product
   }
@@ -35,13 +34,6 @@ class Day11Part1 extends ProblemSolution {
     val falseTargetMonkey = monkeyInput(5).substring(30).toInt
 
     Monkey(items, operand, operationDelta, divTestDelta, trueTargetMonkey, falseTargetMonkey, 0)
-  }
-
-  def applyOp(item: Long, operand: Char, operationDelta: String): Long = (operand, operationDelta) match {
-    case ('+', "old") => item + item
-    case ('*', "old") => item * item
-    case ('+', delta) => item + delta.toInt
-    case ('*', delta) => item * delta.toInt
   }
 
   def processRound(monkeys: Array[Monkey]): Unit = {
