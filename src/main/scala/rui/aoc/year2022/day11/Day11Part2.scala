@@ -7,30 +7,6 @@ import rui.aoc.year2022.utils.FileIO
 import scala.collection.mutable.ArrayBuffer
 
 class Day11Part2 extends ProblemSolution {
-
-  def applyOp(item: Long, operand: Char, operationDelta: String): Long = (operand, operationDelta) match {
-    case ('+', "old") => item + item
-    case ('*', "old") => item * item
-    case ('+', delta) => item + delta.toInt
-    case ('*', delta) => item * delta.toInt
-  }
-
-  def processRound(monkeys: Array[Monkey2], divisorsLcm: Long): Unit = {
-    monkeys.foreach(monkey => {
-      monkey.items.foreach(item => {
-        val valueAfterOp = applyOp(item, monkey.operand, monkey.operationDelta)
-        val boredVal = valueAfterOp % divisorsLcm
-        if (boredVal % monkey.divTestDelta == 0) {
-          monkeys(monkey.trueTargetMonkey).items.addOne(boredVal)
-        } else {
-          monkeys(monkey.falseTargetMonkey).items.addOne(boredVal)
-        }
-        monkey.numItemsInspected += 1
-      })
-      monkey.items.clear()
-    })
-  }
-
   override def solve(): AnyVal = {
     val monkeys = FileIO
       .readResourceLines("day11.txt")
@@ -52,7 +28,7 @@ class Day11Part2 extends ProblemSolution {
       .product
   }
 
-  def parseMonkey(monkeyInput: Array[String]): Monkey2 = {
+  def parseMonkey(monkeyInput: Array[String]): Monkey = {
     val items = monkeyInput(1)
       .substring(18)
       .split(", ")
@@ -60,20 +36,33 @@ class Day11Part2 extends ProblemSolution {
       .to(ArrayBuffer)
     val operand = monkeyInput(2)(23)
     val operationDelta = monkeyInput(2).substring(25)
-    val divTestDelta = monkeyInput(3).substring(21).toLong
+    val divTestDelta = monkeyInput(3).substring(21).toInt
     val trueTargetMonkey = monkeyInput(4).substring(29).toInt
     val falseTargetMonkey = monkeyInput(5).substring(30).toInt
 
-    Monkey2(items, operand, operationDelta, divTestDelta, trueTargetMonkey, falseTargetMonkey, 0)
+    Monkey(items, operand, operationDelta, divTestDelta, trueTargetMonkey, falseTargetMonkey, 0)
+  }
+
+  def applyOp(item: Long, operand: Char, operationDelta: String): Long = (operand, operationDelta) match {
+    case ('+', "old") => item + item
+    case ('*', "old") => item * item
+    case ('+', delta) => item + delta.toInt
+    case ('*', delta) => item * delta.toInt
+  }
+
+  def processRound(monkeys: Array[Monkey], divisorsLcm: Int): Unit = {
+    monkeys.foreach(monkey => {
+      monkey.items.foreach(item => {
+        val valueAfterOp = applyOp(item, monkey.operand, monkey.operationDelta)
+        val boredVal = valueAfterOp % divisorsLcm
+        if (boredVal % monkey.divTestDelta == 0) {
+          monkeys(monkey.trueTargetMonkey).items.addOne(boredVal)
+        } else {
+          monkeys(monkey.falseTargetMonkey).items.addOne(boredVal)
+        }
+        monkey.numItemsInspected += 1
+      })
+      monkey.items.clear()
+    })
   }
 }
-
-case class Monkey2(
-    items: ArrayBuffer[Long],
-    operand: Char,
-    operationDelta: String,
-    divTestDelta: Long,
-    trueTargetMonkey: Int,
-    falseTargetMonkey: Int,
-    var numItemsInspected: Int
-)
