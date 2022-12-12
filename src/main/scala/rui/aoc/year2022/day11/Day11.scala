@@ -31,4 +31,29 @@ object Day11 {
 
     Monkey(items, operand, operationDelta, divTestDelta, trueTargetMonkey, falseTargetMonkey, 0)
   }
+
+  def processRound(monkeys: Array[Monkey], modifyWorryLevel: Long => Long): Unit = {
+    monkeys.foreach(monkey => {
+      monkey.items.foreach(item => {
+        val modifiedWorryLevel = modifyWorryLevel(applyOp(item, monkey.operand, monkey.operationDelta))
+        if (modifiedWorryLevel % monkey.divTestDelta == 0) {
+          monkeys(monkey.trueTargetMonkey).items.addOne(modifiedWorryLevel)
+        } else {
+          monkeys(monkey.falseTargetMonkey).items.addOne(modifiedWorryLevel)
+        }
+        monkey.numItemsInspected += 1
+      })
+      monkey.items.clear()
+    })
+  }
+
+  def processRounds(monkeys: Array[Monkey], numRounds: Int, modifyWorryLevel: Long => Long): Long = {
+    (0 until numRounds).foreach(_ => processRound(monkeys, modifyWorryLevel))
+    monkeys
+      .map(_.numItemsInspected)
+      .sorted
+      .map(_.toLong)
+      .takeRight(2)
+      .product
+  }
 }
