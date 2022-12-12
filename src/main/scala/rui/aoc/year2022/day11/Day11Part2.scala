@@ -1,11 +1,9 @@
 package rui.aoc.year2022.day11
 
 import rui.aoc.year2022.ProblemSolution
-import rui.aoc.year2022.day10.Day10.computeCycleValues
 import rui.aoc.year2022.day11.Day11.{applyOp, parseMonkeys}
 import rui.aoc.year2022.utils.FileIO
 
-import scala.collection.mutable.ArrayBuffer
 
 class Day11Part2 extends ProblemSolution {
   override def solve(): AnyVal = {
