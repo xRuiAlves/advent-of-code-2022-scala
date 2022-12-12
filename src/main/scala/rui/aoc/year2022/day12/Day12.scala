@@ -14,18 +14,18 @@ object Day12 {
 
   def findNeighbors(
     map: Map,
-    state: ClimbingState,
+    position: Coordinate,
     isNeighborValid: (Map, Coordinate, Coordinate) => Boolean
   ): Seq[Coordinate] = Seq(
-    (state.position._1 - 1, state.position._2),
-    (state.position._1 + 1, state.position._2),
-    (state.position._1, state.position._2 - 1),
-    (state.position._1, state.position._2 + 1))
+    (position._1 - 1, position._2),
+    (position._1 + 1, position._2),
+    (position._1, position._2 - 1),
+    (position._1, position._2 + 1))
     .filter(_._1 >= 0)
     .filter(_._2 >= 0)
     .filter(_._2 < map.length)
     .filter(_._1 < map.head.length)
-    .filter(neighbor => isNeighborValid(map, state.position, neighbor)
+    .filter(neighbor => isNeighborValid(map, position, neighbor)
   )
 
   def findMinPath(
@@ -34,24 +34,25 @@ object Day12 {
     isDestination: (Map, Coordinate) => Boolean,
     isNeighborValid: (Map, Coordinate, Coordinate) => Boolean
   ): Int = {
-    val pQueue = mutable.PriorityQueue()(Ordering.by(ClimbingState.climbingStateOrder).reverse)
-    val visited: mutable.Set[ClimbingState] = mutable.Set()
-    pQueue.enqueue(ClimbingState(start, 0))
+    val queue = mutable.Queue[Coordinate]()
+    val visited: mutable.Set[Coordinate] = mutable.Set()
+    queue.enqueue(start)
 
-    while (pQueue.nonEmpty) {
-      val curr = pQueue.dequeue()
+    var distance = 0
+    while (queue.nonEmpty) {
+      for (_ <- queue.indices) {
+        val curr = queue.dequeue()
+        if (!visited.contains(curr)) {
+          visited.addOne(curr)
 
-      if (!visited.contains(curr)) {
-        visited.addOne(curr)
+          if (isDestination(map, curr)) {
+            return distance
+          }
 
-        if (isDestination(map, curr.position)) {
-          return curr.distance
+          findNeighbors(map, curr, isNeighborValid).foreach(neighbor => queue.enqueue(neighbor))
         }
-
-        findNeighbors(map, curr, isNeighborValid).foreach(neighbor => pQueue.enqueue(
-          ClimbingState(neighbor, curr.distance + 1)
-        ))
       }
+      distance += 1
     }
 
     throw new Exception("Path not found")
