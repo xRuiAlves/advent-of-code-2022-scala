@@ -1,73 +1,31 @@
 package rui.aoc.year2022.day8
 
 import rui.aoc.year2022.ProblemSolution
+import rui.aoc.year2022.day8.Day8.{TreeGrid, parseTreeGrid}
 import rui.aoc.year2022.utils.FileIO
 
 import scala.collection.mutable
 
 class Day8Part2 extends ProblemSolution {
-
-  def getScore(grid: Array[Array[Int]], i: Int, j: Int): Int = {
-    val me = grid(i)(j)
-
-    var r = 0
-    var l = 0
-    var t = 0
-    var b = 0
-
-    def countRight(): Unit = {
-      for (z <- j + 1 until grid(i).length) {
-        r += 1
-        if (grid(i)(z) >= me) return
-      }
-    }
-
-    def countLeft(): Unit = {
-      for (z <- j - 1  to 0 by -1) {
-        l += 1
-        if (grid(i)(z) >= me) return
-      }
-    }
-
-    def countTop(): Unit = {
-      for (z <- i - 1 to 0 by -1) {
-        t += 1
-        if (grid(z)(j) >= me) return
-      }
-    }
-
-    def countBottom(): Unit = {
-      for (z <- i + 1 until  grid.length) {
-        b += 1
-        if (grid(z)(j) >= me) return
-      }
-    }
-
-    countLeft()
-    countRight()
-    countTop()
-    countBottom()
-
-    println(r * l * t * b)
-    r * l * t * b
-  }
-
   override def solve(): AnyVal = {
-    val grid: Array[Array[Int]] = FileIO
-      .readResourceLines("day8.txt")
-      .map(_
-        .toCharArray
-        .map(_ - '0')
-      )
+    val grid: TreeGrid = parseTreeGrid(FileIO.readResourceLines("day8.txt"))
+    val transposedGrid: TreeGrid = grid.transpose
 
-    var max: Int = 0
-    for (i <- grid.indices) {
-      for (j <- grid(i).indices) {
-        max = math.max(max, getScore(grid, i, j))
-      }
-    }
-    max
+    grid.map(
+      _.map(tree => getScore(grid, transposedGrid, tree)).max
+    ).max
   }
 
-  type TreeCoord = (Int, Int)
+  def getScore(grid: TreeGrid, transposedGrid: TreeGrid, tree: Tree): Int = {
+    val rightScore = countVisibleTreesInLine(grid(tree.y).drop(tree.x + 1), tree.height)
+    val leftScore =  countVisibleTreesInLine(grid(tree.y).take(tree.x).reverse, tree.height)
+    val topScore =  countVisibleTreesInLine(transposedGrid.apply(tree.x).drop(tree.y + 1), tree.height)
+    val bottomScore =  countVisibleTreesInLine(transposedGrid.apply(tree.x).take(tree.y).reverse, tree.height)
+    rightScore * leftScore * topScore * bottomScore
+  }
+
+  def countVisibleTreesInLine(treeLine: Array[Tree], baseTreeHeight: Int): Int = math.min(
+    treeLine.takeWhile(_.height < baseTreeHeight).length + 1,
+    treeLine.length
+  )
 }

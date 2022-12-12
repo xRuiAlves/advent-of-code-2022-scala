@@ -1,7 +1,7 @@
 package rui.aoc.year2022.day8
 
 object Day8 {
-  def parseTreeGrid(input: Array[String]): Array[Array[Tree]] = {
+  def parseTreeGrid(input: Array[String]): TreeGrid = {
     input.zipWithIndex
       .map {
         case (lineStr, y) => lineStr
@@ -13,4 +13,6 @@ object Day8 {
           }
       }
   }
+
+  type TreeGrid = Array[Array[Tree]]
 }

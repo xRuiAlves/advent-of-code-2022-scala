@@ -2,14 +2,14 @@ package rui.aoc.year2022.day8
 
 import rui.aoc.year2022.ProblemSolution
 import rui.aoc.year2022.day6.Day6.countCharsAtMarker
-import rui.aoc.year2022.day8.Day8.parseTreeGrid
+import rui.aoc.year2022.day8.Day8.{TreeGrid, parseTreeGrid}
 import rui.aoc.year2022.utils.FileIO
 
 import scala.collection.mutable
 
 class Day8Part1 extends ProblemSolution {
   override def solve(): AnyVal = {
-    val grid: Array[Array[Tree]] = parseTreeGrid(FileIO.readResourceLines("day8.txt"))
+    val grid: TreeGrid = parseTreeGrid(FileIO.readResourceLines("day8.txt"))
     val trees = mutable.Set[Tree]()
 
     // Horizontal
