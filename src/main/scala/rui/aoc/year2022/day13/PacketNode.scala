@@ -2,7 +2,7 @@ package rui.aoc.year2022.day13
 
 import scala.collection.mutable.ArrayBuffer
 
-case class PacketNode(var value: Option[Int], children: ArrayBuffer[PacketNode] = ArrayBuffer.empty[PacketNode]) {
+case class PacketNode(value: Option[Int], children: ArrayBuffer[PacketNode] = ArrayBuffer.empty[PacketNode]) {
   def compareTo(other: PacketNode): Int = {
     if (this.value.isDefined && other.value.isDefined) {
       if (this.value.get < other.value.get) return -1
