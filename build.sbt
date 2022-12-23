@@ -6,3 +6,5 @@ lazy val root = (project in file("."))
   .settings(
     name := "advent-of-code-2022"
   )
+
+scalacOptions ++= Seq("-deprecation")
