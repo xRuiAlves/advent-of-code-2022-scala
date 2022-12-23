@@ -19,6 +19,6 @@ class Day5Part2 extends ProblemSolution {
       cratesToMove.reverse.foreach(crate => stacks(move.to - 1).push(crate))
     })
 
-    CrateWord(stacks.map(_.pop).mkString)
+    CrateWord(stacks.map(_.pop()).mkString)
   }
 }

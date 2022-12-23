@@ -15,6 +15,6 @@ class Day5Part1 extends ProblemSolution {
       }
     })
 
-    CrateWord(stacks.map(_.pop).mkString)
+    CrateWord(stacks.map(_.pop()).mkString)
   }
 }

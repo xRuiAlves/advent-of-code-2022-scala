@@ -37,7 +37,7 @@ object Day5 {
   def getMoveMatches(input: Array[String]): Array[Move] = input
     .map(MOVE_STACKS_REGEX.findAllMatchIn(_))
     .dropWhile(_.isEmpty)
-    .map(_.next)
+    .map(_.next())
     .map(matchResult => Move(
       matchResult.group("numCrates").toInt,
       matchResult.group("from").toInt,
