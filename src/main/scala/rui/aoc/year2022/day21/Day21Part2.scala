@@ -1,13 +1,10 @@
 package rui.aoc.year2022.day21
 
 import rui.aoc.year2022.ProblemSolution
+import rui.aoc.year2022.day21.Day21._
 import rui.aoc.year2022.utils.FileIO
 
 class Day21Part2 extends ProblemSolution {
-  private final val ROOT_MONKEY_NAME = "root"
-  private final val HUMAN_MONKEY_NAME = "humn"
-  var runs = 0
-
   override def solve(): AnyVal = {
     val rawMonkeysOpsLines = FileIO.readResourceLines("day21.txt")
     val rootMonkeyLine = rawMonkeysOpsLines.find(_.startsWith(ROOT_MONKEY_NAME)).get
@@ -41,25 +38,4 @@ class Day21Part2 extends ProblemSolution {
       case 0 => decreaseHumanValueWhileYellEquals0(monkeys, humanYellValue - 1)
       case _ => humanYellValue
     }
-
-  def monkeyYellValue(
-    monkeys: Map[String, Monkey],
-    monkeyName: String
-  ): Long = {
-    val monkey = monkeys(monkeyName)
-    monkey.value match {
-      case Some(value) => value
-      case None => {
-        val monkeyOp = monkey.monkeyOp.get
-        val leftYellValue = monkeyYellValue(monkeys, monkeyOp.leftMonkeyName)
-        val rightYellValue = monkeyYellValue(monkeys, monkeyOp.rightMonkeyName)
-        monkeyOp.op match {
-          case '+' => leftYellValue + rightYellValue
-          case '-' => leftYellValue - rightYellValue
-          case '*' => leftYellValue * rightYellValue
-          case '/' => leftYellValue / rightYellValue
-        }
-      }
-    }
-  }
 }
