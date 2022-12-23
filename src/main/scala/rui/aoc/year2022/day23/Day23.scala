@@ -1,7 +1,7 @@
 package rui.aoc.year2022.day23
 
 object Day23 {
-  final val PROPOSED_MOVE_GROUPS = Array(
+  final val PROPOSED_MOVE_GROUPS = IndexedSeq(
     ((0, -1), (1, -1), (-1, -1)),
     ((0, 1), (1, 1), (-1, 1)),
     ((-1, 0), (-1, -1), (-1, 1)),
