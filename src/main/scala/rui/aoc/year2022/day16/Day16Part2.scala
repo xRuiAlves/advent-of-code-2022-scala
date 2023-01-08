@@ -49,12 +49,15 @@ class Day16Part2 extends ProblemSolution {
         myGraphValveIds.addOne(startNodeId)
         elphGraphValveIds.addOne(startNodeId)
 
-        val myGraph = buildGraph(graph, valvesById, myGraphValveIds)
-        val elphGraph = buildGraph(graph, valvesById, elphGraphValveIds)
-        math.max(
-          best,
-          findBestFlowProduction(myGraph, TIME) + findBestFlowProduction(elphGraph, TIME)
-        )
+        if (elphGraphValveIds.size > myGraphValveIds.size) best
+        else {
+          val myGraph = buildGraph(graph, valvesById, myGraphValveIds)
+          val elphGraph = buildGraph(graph, valvesById, elphGraphValveIds)
+          math.max(
+            best,
+            findBestFlowProduction(myGraph, TIME) + findBestFlowProduction(elphGraph, TIME)
+          )
+        }
       }
     }
   }
